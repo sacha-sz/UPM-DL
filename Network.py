@@ -93,15 +93,15 @@ class Network3(nn.Module):
         :param x: The input data.
         :return: The neural network output.
         """
-        x_1 = F.relu(self.conv1_bn(self.conv1(x)))
-        x_2 = F.relu(self.conv2_bn(self.conv2(x_1)))
+        x_1 = F.sigmoid(self.conv1_bn(self.conv1(x)))
+        x_2 = F.sigmoid(self.conv2_bn(self.conv2(x_1)))
         x_3 = F.relu(self.conv3_bn(self.conv3(x_2)))
 
-        x_4 = F.relu(self.t_conv1_bn(self.t_conv1(x_3)))
+        x_4 = F.sigmoid(self.t_conv1_bn(self.t_conv1(x_3)))
         x_4 = cat((x_4, x_2), 1)
-        x_5 = F.relu(self.t_conv2_bn(self.t_conv2(x_4)))
+        x_5 = F.sigmoid(self.t_conv2_bn(self.t_conv2(x_4)))
         x_5 = cat((x_5, x_1), 1)
-        x_6 = F.relu(self.t_conv3(x_5))
+        x_6 = F.sigmoid(self.t_conv3(x_5))
         x_6 = cat((x_6, x), 1)
         x = self.output(x_6)
         return x

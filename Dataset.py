@@ -14,7 +14,7 @@ class ImageDataset(Dataset):
         :param transform: (Optional) `transform` function to be applied on a gray image.
         :param target_transform: (Optional) `transform` function to be applied on a colored image.
         """
-        self.names = os.listdir(color_dir)[:4]
+        self.names = os.listdir(color_dir)
         self.color_dir = color_dir
         self.gray_dir = gray_dir
         self.transform = transform
