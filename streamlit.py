@@ -84,13 +84,10 @@ def colorize_image(gray, model=None, device=None):
         raise ValueError("Model and device must be provided.")
 
     with torch.no_grad():
-        output = model(gray.unsqueeze(0))
-        output = output.squeeze(0).cpu().numpy()
-        output = np.moveaxis(output, 0, -1)
-        output = np.concatenate((gray[0].cpu().numpy()[..., np.newaxis], output), axis=-1)
-        output = lab2rgb(output)
-        output = np.clip(output * 255, 0, 255).astype(np.uint8)
-    return output
+        output = model(gray.unsqueeze(0).float()).int()
+        img = cat((gray_image, output[0]), 0)
+        img = lab2rgb(img.permute(1, 2, 0).cpu().numpy())
+    return img
 
 
 
@@ -123,7 +120,7 @@ def main():
 
         st.image(image_resized, caption=f"Original image: {uploaded_file.name}")
         cv2.imwrite("resized_image.png", image_resized)        
-        gray_image = read_image("resized_image.png", ImageReadMode.GRAY).to(device).float()
+        gray_image = read_image("resized_image.png", ImageReadMode.GRAY).to(device) / 2.5 
         # Delete the resized image
         os.remove("resized_image.png")
         
