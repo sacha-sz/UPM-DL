@@ -1,4 +1,5 @@
 streamlit
+streamlit-image-comparison
 numpy
 torch
 matplotlib
